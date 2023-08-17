@@ -1,0 +1,175 @@
+[Version]
+Signature="$Chicago$"
+CESignature="$Windows CE$"
+Provider=%CompanyName%
+
+[SourceDisksNames]
+1=,"Application Files",, App
+2=,"Windows Files",, Windows
+
+[DefaultInstall]
+CopyFiles=Files.App, Files.Windows
+CEShortcuts=Shortcuts
+
+[Shortcuts]
+%AppName%,0,"CaptVB.vb"
+
+[CEStrings]
+InstallDir=%CE1%\%AppName%
+AppName="CaptVB"
+
+[Strings]
+CompanyName="WinCEDev"
+
+[DestinationDirs]
+Shortcuts=,%CE11%
+Files.App=,%InstallDir%
+Files.Windows=,%CE2%
+Files.Mips 4000 (1K) v2.10=,%CE2%
+Files.SH 4 (4K) v2.10=,%CE2%
+Files.Arm 1100 (4K) v2.10=,%CE2%
+Files.SH 3 (1K) v2.10=,%CE2%
+
+[SourceDisksFiles]
+CaptVB.vb=1
+CaptVB.bmp=1
+CaptVB.htm=2
+
+[CEDevice.CEF]
+ProcessorType=0
+
+[DefaultInstall.Mips 4000 (1K) v2.10]
+CopyFiles=Files.Mips 4000 (1K) v2.10
+CESelfRegister=MSCECommandBar.dll,MSCEComDlg.dll,MSCEFile.dll,vbscript.dll,pvbhost2.dll,pvbform2.dll,pvbdecl.dll
+
+[CEDevice.Mips 4000 (1K) v2.10]
+ProcessorType=4000
+
+[SourceDisksNames.Mips 4000 (1K) v2.10]
+3= ,"Mips 4000 (1K) v2.10 Files",,Mips 4000 (1K) v2.10
+
+[SourceDisksFiles.Mips 4000 (1K) v2.10]
+pvbform2.dll=3
+pvbload.exe=3
+pvbdecl.dll=3
+MSCEFile.dll=3
+vbscript.dll=3
+pvbhost2.dll=3
+vbsen.dll=3
+MSCECommandBar.dll=3
+MSCEComDlg.dll=3
+
+[DefaultInstall.SH 4 (4K) v2.10]
+CopyFiles=Files.SH 4 (4K) v2.10
+CESelfRegister=MSCECommandBar.dll,MSCEComDlg.dll,MSCEFile.dll,vbscript.dll,pvbhost2.dll,pvbform2.dll,pvbdecl.dll
+
+[CEDevice.SH 4 (4K) v2.10]
+ProcessorType=10005
+
+[SourceDisksNames.SH 4 (4K) v2.10]
+3= ,"SH 4 (4K) v2.10 Files",,SH 4 (4K) v2.10
+
+[SourceDisksFiles.SH 4 (4K) v2.10]
+vbsen.dll=3
+pvbform2.dll=3
+MSCEComDlg.dll=3
+MSCEFile.dll=3
+MSCECommandBar.dll=3
+pvbhost2.dll=3
+vbscript.dll=3
+pvbload.exe=3
+pvbdecl.dll=3
+
+[DefaultInstall.Arm 1100 (4K) v2.10]
+CopyFiles=Files.Arm 1100 (4K) v2.10
+CESelfRegister=MSCECommandBar.dll,MSCEComDlg.dll,MSCEFile.dll,vbscript.dll,pvbhost2.dll,pvbform2.dll,pvbdecl.dll
+
+[CEDevice.Arm 1100 (4K) v2.10]
+ProcessorType=2577
+
+[SourceDisksNames.Arm 1100 (4K) v2.10]
+3= ,"Arm 1100 (4K) v2.10 Files",,Arm 1100 (4K) v2.10
+
+[SourceDisksFiles.Arm 1100 (4K) v2.10]
+vbscript.dll=3
+pvbhost2.dll=3
+vbsen.dll=3
+pvbload.exe=3
+pvbdecl.dll=3
+MSCEComDlg.dll=3
+MSCECommandBar.dll=3
+pvbform2.dll=3
+MSCEFile.dll=3
+
+[DefaultInstall.SH 3 (1K) v2.10]
+CopyFiles=Files.SH 3 (1K) v2.10
+CESelfRegister=MSCECommandBar.dll,MSCEComDlg.dll,MSCEFile.dll,vbscript.dll,pvbhost2.dll,pvbform2.dll,pvbdecl.dll
+
+[CEDevice.SH 3 (1K) v2.10]
+ProcessorType=10003
+
+[SourceDisksNames.SH 3 (1K) v2.10]
+3= ,"SH 3 (1K) v2.10 Files",,SH 3 (1K) v2.10
+
+[SourceDisksFiles.SH 3 (1K) v2.10]
+pvbform2.dll=3
+MSCEComDlg.dll=3
+MSCEFile.dll=3
+MSCECommandBar.dll=3
+pvbhost2.dll=3
+vbscript.dll=3
+pvbload.exe=3
+pvbdecl.dll=3
+vbsen.dll=3
+
+[Files.Windows]
+CaptVB.htm
+
+[Files.Mips 4000 (1K) v2.10]
+pvbform2.dll,,0x80000000
+pvbload.exe
+pvbdecl.dll,,0x80000000
+MSCEFile.dll,,0x80000000
+vbscript.dll,,0x80000000
+pvbhost2.dll,,0x80000000
+vbsen.dll
+MSCECommandBar.dll,,0x80000000
+MSCEComDlg.dll,,0x80000000
+
+[Files.SH 4 (4K) v2.10]
+vbsen.dll
+pvbform2.dll,,0x80000000
+MSCEComDlg.dll,,0x80000000
+MSCEFile.dll,,0x80000000
+MSCECommandBar.dll,,0x80000000
+pvbhost2.dll,,0x80000000
+vbscript.dll,,0x80000000
+pvbload.exe
+pvbdecl.dll,,0x80000000
+
+[Files.Arm 1100 (4K) v2.10]
+vbscript.dll,,0x80000000
+pvbhost2.dll,,0x80000000
+vbsen.dll
+pvbload.exe
+pvbdecl.dll,,0x80000000
+MSCEComDlg.dll,,0x80000000
+MSCECommandBar.dll,,0x80000000
+pvbform2.dll,,0x80000000
+MSCEFile.dll,,0x80000000
+
+[Files.App]
+CaptVB.vb
+CaptVB.bmp
+
+[Files.SH 3 (1K) v2.10]
+pvbform2.dll,,0x80000000
+MSCEComDlg.dll,,0x80000000
+MSCEFile.dll,,0x80000000
+MSCECommandBar.dll,,0x80000000
+pvbhost2.dll,,0x80000000
+vbscript.dll,,0x80000000
+pvbload.exe
+pvbdecl.dll,,0x80000000
+vbsen.dll
+
