@@ -64,10 +64,10 @@ You can find the application settings at the following location:
 * **FormPos** Position at which the main window appears on application startup. This value contains the x and y coordinates in pixels delimited by a comma.
 * **DelayTime** Amount of time before a screenshot is taken. This is not a time value, but rather an index specifying how many seconds to wait. Valid values are:
 
-    1. No delay.
-    2. 3-second delay.
-    3. 5-second delay.
-    4. 10-second delay.
+    - 1: No delay.
+    - 2: 3-second delay.
+    - 3: 5-second delay.
+    - 4: 10-second delay.
 * **PlaySound**
 Controls whether the option “Play Sound” is enabled.
 * **FlashLED**
@@ -96,3 +96,4 @@ Overrides the [system sound](https://learn.microsoft.com/en-us/windows/win32/mul
 ## Links
 
 - [HPC:Factor Forum Thread](https://www.hpcfactor.com/forums/forums/thread-view.asp?tid=21065&posts=1)
+- [HPC:Factor SCL](https://www.hpcfactor.com/scl/2119/WinCEDev/CaptVB/version_0.9.0)
