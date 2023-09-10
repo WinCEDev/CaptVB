@@ -37,7 +37,13 @@ Public Const NotificationLED_MetaCycleOff           As Long = 16
 
 Public Function NotificationLED_Count() As Long
 
+    On Error Resume Next
+
     NotificationLED_NLedGetDeviceInfo_Count NotificationLED_NLED_COUNT_INFO_ID, NotificationLED_Count
+    
+    If Err.Number <> 0 Then 'Return 0 if error on API call.
+        NotificationLED_Count = 0
+    End If
 
 End Function
 
@@ -48,11 +54,21 @@ Public Function NotificationLED_Let(ByVal LedNum As Long, _
                                     ByVal OffTime As Long, _
                                     ByVal MetaCycleOn As Long, _
                                     ByVal MetaCycleOff As Long) As Long
+                                    
+    On Error Resume Next
+    
     NotificationLED_Let = NotificationLED_NLedSetDevice(NotificationLED_NLED_SETTINGS_INFO_ID, NotificationLED_MakeNLED_SETTINGS_INFO(LedNum, OffOnBlink, TotalCycleTime, OnTime, OffTime, MetaCycleOn, MetaCycleOff))
+
+    If Err.Number <> 0 Then 'Return 0 if error on API call.
+        NotificationLED_Let = 0
+    End If
+
 End Function
 
 Public Function NotificationLED_GetSupportedFeatures(ByVal LedNum As Long, _
                                                      ByRef CycleAdjust As Long) As Long
+
+    On Error Resume Next
 
     Dim strLedInfo As String
 
@@ -88,6 +104,10 @@ Public Function NotificationLED_GetSupportedFeatures(ByVal LedNum As Long, _
 
         NotificationLED_GetSupportedFeatures = lngResult
     
+    End If
+    
+    If Err.Number <> 0 Then 'Return 0 if error on API call.
+        NotificationLED_GetSupportedFeatures = 0
     End If
 
 End Function
