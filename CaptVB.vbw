@@ -1,0 +1,12 @@
+MainForm = 96, 114, 816, 556, , 539, 282, 1309, 787, C
+ImageListEx = 78, 78, 878, 448, 
+NotifyIcon = 26, 26, 808, 386, 
+PathHelpers = 104, 104, 788, 478, 
+Screenshot = 23, -3, 1323, 715, 
+Settings = 78, 78, 902, 448, 
+TaskbarIcon = 104, 104, 1371, 632, 
+UDTHelper = 104, 104, 928, 474, 
+FormExtensions = 130, 130, 912, 490, 
+SystemSound = 156, 156, 938, 516, 
+DoEvents = 0, 0, 782, 360, 
+NotificationLED = 286, 286, 1527, 908, Z

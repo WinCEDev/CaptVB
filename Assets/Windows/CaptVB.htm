@@ -1,0 +1,164 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Htm-Help" CONTENT="CaptVB.htm#Main_Contents">
+<TITLE>Telephone Alphabet Converter Help</TITLE>
+</HEAD>
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+<!-- PegHelp -->
+<P><A NAME="Main_Contents"></A><B>CaptVB Help</B></P><UL></UL>
+
+<A HREF="CaptVB.htm#overview">About CaptVB</A><BR>
+<A HREF="CaptVB.htm#getting_started">Getting Started</A> <BR>
+<A HREF="CaptVB.htm#the_options_menu">The Options Menu</A><BR>
+<A HREF="CaptVB.htm#change_app_settings_directly">Advanced: Change App Settings 
+Directly</A><BR>
+<A HREF="CaptVB.htm#license">License Information</A><BR>
+
+<BR CLEAR=ALL><!-- PegHelp --><HR>
+
+<!-- ************************Topic Break************************* -->
+
+
+<A NAME="overview"></A><B>About CaptVB</B><UL></UL>
+
+<P>CaptVB is a screenshot utility written in eVB. The user interface is inspired by the Snipping Tool included with modern versions of Windows. If you have ever used Snipping Tool, you will likely feel right at home with CaptVB.<BR>CaptVB has the following features:</P><UL></UL>
+<UL>
+<LI>Immediate screen capture or delayed by 3, 5 or 10 seconds.
+<LI>Fully configurable save location and file naming pattern including current date and time.</LI>
+<LI>Optionally ask where to save each screenshot.</LI>
+<LI>Option to keep the main window always on top.</LI>
+<LI>Play a sound or flash the notification LED (if available) after screen capture.</LI>
+</UL>
+
+<B>See Also</B><BR>
+<A HREF="CaptVB.htm#getting_started">Getting Started</A><BR>
+
+<BR CLEAR=ALL><!-- PegHelp --><HR>
+
+<!-- ************************Topic Break************************* -->
+
+
+<A NAME="getting_started"></A><B>Getting Started</B><UL></UL>
+
+<P>When you start the application, the main window is displayed. The main window is comprised of the following components:</P><UL></UL>
+<UL>
+<LI><B>Screenshot Button:</B><BR>Takes the screenshot with the settings you specified.</LI>
+<LI><B>Delay Dropdown:</B><BR>Delays the screenshot by 3, 5 or 10 seconds. An icon is displayed in the notification area to indicate the amount of time left. If you want to take the screenshot immediately, just tap on the icon.</LI>
+<LI><B>Options Menu:</B><BR>Contains additional settings to make the application best fit your needs.</LI>
+</UL>
+<P>To take a screenshot, simply tap or click on the button with the camera icon.</P><UL></UL>
+<B>See Also</B><BR>
+<A HREF="CaptVB.htm#the_options_menu">The Options Menu</A><BR>
+
+<BR CLEAR=ALL><!-- PegHelp --><HR>
+
+<!-- ************************Topic Break************************* -->
+
+
+<A NAME="the_options_menu"></A><B>The Options Menu</B><UL></UL>
+
+<P>The option menu contains additional settings to make the application best fit your needs.</P><UL></UL>
+<UL>
+<LI><B>After Capture:</B><BR>Contains actions to take after successful capture.</LI>
+<UL>
+<LI><B>Play Sound:</B><BR>Plays a sound after the screenshot has been taken, this can be useful if this takes a while on your device.</LI>
+<LI><B>Flash LED:</B><BR>Flashes the notification LED after the screenshot has been taken. This option may not be visible if your device does not include a notification LED.</LI>
+</UL>
+<LI><B>Always On Top:</B><BR>Keep the main window on top of other applications.</LI>
+<LI><B>Ask Before Saving:</B><BR>You can select this option to always be asked where you would like to save the screenshot. If this option is not selected, the settings for destination directory and chosen file naming pattern will be used.</LI>
+<LI><B>Destination Directory:</B><BR>The location where to save the screenshots.</LI>
+<LI><B>File Naming Pattern:</B><BR>The name of the screenshot. You can use the following pattern strings:
+<UL>
+<LI><B>{d}</B> Replaced by the current day.</LI>
+<LI><B>{m}</B> Replaced by the current month.</LI>
+<LI><B>{y}</B> Replaced by the current year.</LI>
+<LI><B>{t}</B> Replaced by the current time (HH:MM).</LI>
+</UL>
+To revert to the default value, leave the input box blank and click OK, or enter the following value:
+<UL>
+<LI>Screenshot {y}-{m}-{d} {t}</LI>
+</UL>
+</LI>
+</UL>
+<UL></UL>
+
+<BR CLEAR=ALL><!-- PegHelp --><HR>
+
+<!-- ************************Topic Break************************* -->
+
+
+<A NAME="change_app_settings_directly"></A><B>Advanced: Change App Settings Directly</B><UL></UL>
+
+<P>This section is intended for advanced users and describes how you can change the application settings directly from the registry. Some settings are not available from the user interface because they serve very specific scenarios or are mostly useful for troubleshooting.
+<BR><BR>You can find the application settings at the following location:</P>
+<PRE>'HKEY_CURRENT_USER\Software\WinCEDev\CaptVB'</PRE><UL></UL>
+<UL>
+<LI><B>FormPos</B><BR>
+Position at which the main window appears on application startup. This value contains the x and y coordinates in pixels delimited by a comma.</LI>
+
+<LI><B>DelayTime</B><BR>
+Amount of time before a screenshot is taken. This is not a time value, but rather an index specifying how many seconds to wait. Valid values are:
+<OL>
+<LI>No delay.</LI>
+<LI>3-second delay.</LI>
+<LI>5-second delay.</LI>
+<LI>10-second delay.</LI>
+</OL>
+<LI><B>PlaySound</B><BR>
+Controls whether the option “Play Sound” is enabled.</LI>
+
+<LI><B>FlashLED</B><BR>
+Controls whether the option “Flash LED” is enabled.</LI>
+
+<LI><B>AlwaysOnTop</B><BR>
+Controls whether the option “Always on Top” is enabled.</LI>
+
+<LI><B>AskBeforeSaving</B><BR>
+Controls whether the option “Ask Before Saving” is enabled.</LI>
+
+<LI><B>SavePath</B><BR>
+Path where to save screenshots.</LI>
+
+<LI><B>FilePattern</B><BR>
+This contains the file name pattern to use for screenshots to be saved. For more information see <A HREF="CaptVB.htm#the_options_menu">Options Menu</A>.</LI>
+
+<LI><B>LEDNum</B><BR>
+Overrides the LED the application will flash on screenshot completion. By default, the first LED (0) will be used. You can change this value if the program is not flashing the expected LED. On some devices, haptics can be activated by specifying the last LED device.</LI>
+
+<LI><B>SystemSound</B><BR>
+Overrides the system sound to play after the screenshot has been taken. By default, the ‘Asterisk’ sound will be played. If you prefer a different system sound, you can specify one of the following values:
+<UL>
+<LI><B>SystemAsterisk</B></LI>
+<LI><B>SystemDefault</B></LI>
+<LI><B>SystemExclamation</B></LI>
+<LI><B>SystemExit</B></LI>
+<LI><B>SystemHand</B></LI>
+<LI><B>SystemQuestion</B></LI>
+<LI><B>SystemStart</B></LI>
+<LI><B>SystemWelcome</B></LI>
+</UL>
+</UL>
+<UL></UL>
+<BR CLEAR=ALL><!-- PegHelp --><HR>
+
+
+<!-- ************************Topic Break************************* -->
+
+
+<A NAME="license"></A><B>License Information</B><UL></UL>
+
+<P>MIT License</P>
+<BR>
+<P>Copyright (c) 2023 WinCEDev</P><UL></UL>
+<BR>
+<P>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</P><UL></UL>
+<BR>
+<P>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</P><UL></UL>
+<BR>
+<P>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</P><UL></UL>
+
+<BR CLEAR=ALL>
+<!-- PegHelp -->
+</BODY>
+</HTML>

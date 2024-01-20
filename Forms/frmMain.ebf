@@ -1,0 +1,608 @@
+VERSION 5.00
+Object = "{BE67ABF5-0137-11D2-9B8A-00C04FAD5AEC}#1.0#0"; "mscecommandbar.dll"
+Object = "{25C953A7-5464-11D1-A714-00AA0044064C}#1.0#0"; "MSCEFILE.DLL"
+Object = "{A32A88B3-817C-11D1-A762-00AA0044064C}#1.0#0"; "mscecomdlg.dll"
+Begin VB.Form MainForm 
+   BorderStyle     =   3  'Fixed Dialog
+   Caption         =   "CaptVB"
+   ClientHeight    =   345
+   ClientLeft      =   -15
+   ClientTop       =   270
+   ClientWidth     =   3090
+   KeyPreview      =   -1  'True
+   ScaleHeight     =   345
+   ScaleWidth      =   3090
+   ShowInTaskbar   =   0   'False
+   Begin CEComDlgCtl.CommonDialog CommonDialog 
+      Left            =   2760
+      Top             =   0
+      _cx             =   847
+      _cy             =   847
+      CancelError     =   -1  'True
+      Color           =   0
+      DefaultExt      =   ""
+      DialogTitle     =   ""
+      FileName        =   ""
+      Filter          =   ""
+      FilterIndex     =   0
+      Flags           =   0
+      HelpCommand     =   0
+      HelpContext     =   ""
+      HelpFile        =   ""
+      InitDir         =   ""
+      MaxFileSize     =   256
+      FontBold        =   0   'False
+      FontItalic      =   0   'False
+      FontName        =   ""
+      FontSize        =   10
+      FontUnderline   =   0   'False
+      Max             =   0
+      Min             =   0
+      FontStrikethru  =   0   'False
+   End
+   Begin FILECTLCtl.FileSystem FileSystem 
+      Left            =   0
+      Top             =   0
+      _cx             =   2200
+      _cy             =   1400
+   End
+   Begin CommandbarLib.CommandBar CommandBar 
+      Height          =   345
+      Left            =   0
+      TabIndex        =   0
+      Top             =   0
+      Width           =   2295
+      _cx             =   4057
+      _cy             =   600
+      Enabled         =   -1  'True
+      OKButton        =   0   'False
+      HelpButton      =   0   'False
+      CloseButton     =   0   'False
+   End
+   Begin VBCE.Timer tmrDelay 
+      Left            =   2280
+      Top             =   0
+      _cx             =   847
+      _cy             =   847
+      Enabled         =   -1  'True
+      Interval        =   1000
+   End
+End
+Attribute VB_Name = "MainForm"
+Attribute VB_GlobalNameSpace = False
+Attribute VB_Creatable = False
+Attribute VB_PredeclaredId = True
+Attribute VB_Exposed = False
+Option Explicit
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'ToolBar resource string constants.
+
+Private Const RES_TOOLBAR_TAKESCREENSHOT        As Long = 101
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'ComboBox resource string constants.
+
+Private Const RES_COMBOBOX_NODELAY              As Long = 102
+
+Private Const RES_COMBOBOX_3SECDELAY            As Long = 103
+
+Private Const RES_COMBOBOX_5SECDELAY            As Long = 104
+
+Private Const RES_COMBOBOX_10SECDELAY           As Long = 105
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'MenuBar resource string constants.
+
+Private Const RES_MENUBAR_OPTIONS               As Long = 106
+
+Private Const RES_MENUBAR_AFTERCAPTURE          As Long = 107
+
+Private Const RES_MENUBAR_PLAYSOUND             As Long = 108
+
+Private Const RES_MENUBAR_FLASHLED              As Long = 109
+
+Private Const RES_MENUBAR_ALWAYSONTOP           As Long = 110
+
+Private Const RES_MENUBAR_ASKBEFORESAVING       As Long = 111
+
+Private Const RES_MENUBAR_SAVEPATH              As Long = 112
+
+Private Const RES_MENUBAR_FILENAME              As Long = 113
+
+Private Const RES_MENUBAR_HELP                  As Long = 114
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'Common Dialog resource string constants.
+
+Private Const RES_COMMONDIALOG_FILTER           As Long = 115
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'Dialog resource string constants.
+
+Private Const RES_DIALOG_DESTDIR                As Long = 116
+
+Private Const RES_DIALOG_DESTDIRTITLE           As Long = 117
+
+Private Const RES_DIALOG_PATHNOTEXISTS          As Long = 118
+
+Private Const RES_DIALOG_INVALIDCHARS           As Long = 119
+
+Private Const RES_DIALOG_FILENAMINGPATTERN      As Long = 120
+
+Private Const RES_DIALOG_FILENAMINGPATTERNTITLE As Long = 121
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'Misc resource string constants.
+
+Private Const RES_MISC_DEFAULTPATTERN           As Long = 122
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'Constants for screenshot delay values.
+
+Private Const INDEX_NODELAY                     As Long = 0 'No delay.
+
+Private Const INDEX_3SECDELAY                   As Long = 1 '3-second delay.
+
+Private Const INDEX_5SECDELAY                   As Long = 2 '5-second delay.
+
+Private Const INDEX_10SECDELAY                  As Long = 3 '10-second delay.
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'Constants for default values.
+
+Private Const DEFAULT_SAVE_PATH                 As String = "\" 'Used by save path setting getter.
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'Form-level variables.
+
+Private AppName                                 As String 'Set to App.Title for speed.
+
+Private DefaultFilePattern                      As String 'Default file pattern.
+
+Private DelayCountdown                          As Long 'Used to set delay countdown.
+
+Private ImageList                               As Long 'Handle to the icon image list.
+
+Private TaskbarIcon                             As Long 'Handle to taskbar icon handle.
+
+Private HasLED                                  As Boolean 'Holds if this device has a notification LED.
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'App Settings.
+
+Private DelayTime                               As Long 'Can be any of the screenshot delay constants.
+
+Private PlaySound                               As Boolean 'Play a sound when screen capture is finished.
+
+Private FlashLED                                As Boolean 'Flash the system LED after screen capture.
+
+Private LedNum                                  As Long 'LED index number.
+
+Private AlwaysOnTop                             As Boolean 'Keep the window always on top of other windows.
+
+Private AskBeforeSaving                         As Boolean 'Show a save dialog after screenshot capture.
+
+Private SavePath                                As String 'Holds the directory where to save screenshots.
+
+Private FilePattern                             As String 'Holds the screenshot file name pattern.
+
+Private SystemSound                             As String 'Holds system sound to play after taking a screenshot if this option is set.
+
+'These functions are used to set user preferences.
+Private Sub LetDelayTime(ByVal NewValue As Long)
+
+    Dim comComboBox As CommandBarComboBox
+
+    Set comComboBox = CommandBar.Controls("Delay")
+
+    If NewValue <> comComboBox.ListIndex Then 'It wasn't called from the ComboBox itself.
+        comComboBox.ListIndex = NewValue
+    End If
+
+    DelayTime = NewValue
+End Sub
+
+Private Sub LetPlaySound(ByVal NewValue As Boolean)
+    CommandBar.Controls("Menu").Items("Options").SubItems("AfterCapture").SubItems("PlaySound").Checked = NewValue
+    PlaySound = NewValue
+End Sub
+
+Private Sub LetFlashLED(ByVal NewValue As Boolean)
+    CommandBar.Controls("Menu").Items("Options").SubItems("AfterCapture").SubItems("FlashLED").Checked = NewValue
+    FlashLED = NewValue
+End Sub
+
+Private Sub LetAlwaysOnTop(ByVal NewValue As Boolean)
+    CommandBar.Controls("Menu").Items("Options").SubItems("AlwaysOnTop").Checked = NewValue
+
+    FormExtensions_SetTopMostState Me, NewValue
+    AlwaysOnTop = NewValue
+End Sub
+
+Private Sub LetAskBeforeSaving(ByVal NewValue As Boolean)
+    CommandBar.Controls("Menu").Items("Options").SubItems("AskBeforeSaving").Checked = NewValue
+    AskBeforeSaving = NewValue
+End Sub
+
+'This function calls Screenshot_Take and ensures the form responds appropiately, also triggers post-screenshot actions depending on user preferences.
+Private Sub TakeScreenshot()
+
+    Hide
+    Enabled = False 'Prevents the user from clicking the screenshot button until we are done.
+
+    DoEvents_Run 'Clear the message queue to make sure we are hidden.
+
+    Dim strFilePath As String
+ 
+    If AskBeforeSaving Then 'Build the path based on this setting.
+
+        'Generate a temporary file name.
+        Dim strTempPath As String
+
+        strTempPath = PathHelpers_GetTempFileName(PathHelpers_GetTempPath, "CVB", 0)
+
+        While LenB(FileSystem.Dir(strTempPath)) <> 0
+
+            strTempPath = PathHelpers_GetTempFileName(PathHelpers_GetTempPath, "CVB", 0)
+
+        Wend
+
+        strFilePath = strTempPath
+        
+    Else
+    
+        'Write to the correct location directly.
+        strFilePath = PathHelpers_GetNextAvailableFileName(FileSystem, PathHelpers_AddPathSeparator(SavePath), BuildFileName(FilePattern) & ".bmp")
+    End If
+
+    Screenshot_Take strFilePath
+ 
+    If PlaySound Then
+        SystemSound_Play SystemSound
+    End If
+    
+    If FlashLED Then
+        If HasLED Then
+            NotificationLED_Let LedNum, 1, 0, 0, 0, 0, 0
+            NotificationLED_Let LedNum, 0, 0, 0, 0, 0, 0
+        End If
+    End If
+ 
+    Enabled = True
+    Show
+ 
+    If AskBeforeSaving Then
+
+        CommonDialog.FileName = PathHelpers_GetFilenameFromPath(PathHelpers_GetNextAvailableFileName(FileSystem, PathHelpers_AddPathSeparator(SavePath), BuildFileName(FilePattern) & ".bmp"))
+        CommonDialog.InitDir = SavePath
+        
+        On Error Resume Next
+
+        CommonDialog.ShowSave
+
+        If Err.Number = 32755 Then 'Cancel was selected.
+            FileSystem.Kill strFilePath 'Remove the temporary file.
+
+            Exit Sub
+
+        End If
+
+        On Error GoTo 0
+
+        FileSystem.MoveFile strFilePath, CommonDialog.FileName
+    End If
+ 
+End Sub
+
+'This builds the file name based on the user-supplied pattern.
+Private Function BuildFileName(ByVal Name As String)
+
+    Dim Today As Date
+
+    Today = Now
+
+    If InStr(Name, "{d}") <> 0 Then
+        Name = Replace(Name, "{d}", Day(Today))
+    End If
+
+    If InStr(Name, "{m}") <> 0 Then
+        Name = Replace(Name, "{m}", Month(Today))
+    End If
+
+    If InStr(Name, "{y}") <> 0 Then
+        Name = Replace(Name, "{y}", Year(Today))
+    End If
+
+    If InStr(Name, "{t}") <> 0 Then
+        Name = Replace(Name, "{t}", Replace(FormatDateTime(Today, vbShortTime), ":", vbNullString, 1, 1, vbBinaryCompare))
+    End If
+
+    BuildFileName = Name
+
+End Function
+
+'This initializes the Common Dialog control.
+Private Sub InitializeCommonDialog()
+    CommonDialog.HelpFile = AppName & ".htm#Main_Contents"
+    CommonDialog.DefaultExt = ".bmp"
+    CommonDialog.Filter = LoadResString(RES_COMMONDIALOG_FILTER)
+End Sub
+
+'This initializes the ComboBox.
+Private Sub InitializeComboBox()
+
+    Dim objComboBox As CommandBarComboBox
+
+    Set objComboBox = CommandBar.Controls.Add(cbrComboBox, "Delay")
+
+    objComboBox.Style = cbrComboDropDownList
+    objComboBox.Width = 1450
+    objComboBox.AddItem LoadResString(RES_COMBOBOX_NODELAY)
+    objComboBox.AddItem LoadResString(RES_COMBOBOX_3SECDELAY)
+    objComboBox.AddItem LoadResString(RES_COMBOBOX_5SECDELAY)
+    objComboBox.AddItem LoadResString(RES_COMBOBOX_10SECDELAY)
+    objComboBox.ListIndex = 0
+
+End Sub
+
+'This initializes the MenuBar items.
+Private Sub InitializeMenuBar()
+
+    Dim objMenuBar As CommandBarMenuBar
+
+    Set objMenuBar = CommandBar.Controls.Add(cbrMenuBar, "Menu")
+
+    Dim objMenuItem As CommandbarLib.Item, objSubMenuItem As CommandbarLib.Item
+
+    ''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+    'Options Menu
+    Set objMenuItem = objMenuBar.Items.Add(, "Options", LoadResString(RES_MENUBAR_OPTIONS))
+    
+    Set objSubMenuItem = objMenuItem.SubItems.Add(, "AfterCapture", LoadResString(RES_MENUBAR_AFTERCAPTURE))
+
+    objSubMenuItem.SubItems.Add , "PlaySound", LoadResString(RES_MENUBAR_PLAYSOUND)
+
+    If HasLED Then objSubMenuItem.SubItems.Add , "FlashLED", LoadResString(RES_MENUBAR_FLASHLED)
+    objMenuItem.SubItems.Add , , , cbrMenuSeparator
+    
+    objMenuItem.SubItems.Add , "AlwaysOnTop", LoadResString(RES_MENUBAR_ALWAYSONTOP)
+    objMenuItem.SubItems.Add , "AskBeforeSaving", LoadResString(RES_MENUBAR_ASKBEFORESAVING)
+    objMenuItem.SubItems.Add , , , cbrMenuSeparator
+    objMenuItem.SubItems.Add , "SavePath", LoadResString(RES_MENUBAR_SAVEPATH)
+    objMenuItem.SubItems.Add , "FileName", LoadResString(RES_MENUBAR_FILENAME)
+    objMenuItem.SubItems.Add , , , cbrMenuSeparator
+    objMenuItem.SubItems.Add , "Help", LoadResString(RES_MENUBAR_HELP)
+
+End Sub
+
+'This function loads all settings from the registry.
+Private Sub LoadSettings()
+
+    Dim varPos As Variant
+
+    varPos = Split(Settings_Get(AppName, "Settings", "FormPos", Me.Left & "," & Me.Top), ",")
+    
+    Move varPos(0), varPos(1)
+
+    LetDelayTime CLng(Settings_Get(AppName, "Settings", "DelayTime", INDEX_NODELAY))
+    LetPlaySound CBool(Settings_Get(AppName, "Settings", "PlaySound", False))
+
+    If HasLED Then LetFlashLED CBool(Settings_Get(AppName, "Settings", "FlashLED", False))
+    LetAlwaysOnTop CBool(Settings_Get(AppName, "Settings", "AlwaysOnTop", False))
+    LetAskBeforeSaving CBool(Settings_Get(AppName, "Settings", "AskBeforeSaving", False))
+    SavePath = Settings_Get(AppName, "Settings", "SavePath", DEFAULT_SAVE_PATH)
+    FilePattern = Settings_Get(AppName, "Settings", "FilePattern", DefaultFilePattern)
+    LedNum = CLng(Settings_Get(AppName, "Settings", "LEDNum", 0))
+    SystemSound = Settings_Get(AppName, "Settings", "SystemSound", SystemSound_ceSystemSoundAsterisk)
+End Sub
+
+'This function saves all settings to the registry.
+Private Sub SaveSettings()
+    Settings_Let AppName, "Settings", "FormPos", Me.Left & "," & Me.Top
+    Settings_Let AppName, "Settings", "DelayTime", DelayTime
+    Settings_Let AppName, "Settings", "PlaySound", PlaySound
+
+    If HasLED Then Settings_Let AppName, "Settings", "FlashLED", FlashLED
+    Settings_Let AppName, "Settings", "AlwaysOnTop", AlwaysOnTop
+    Settings_Let AppName, "Settings", "AskBeforeSaving", AskBeforeSaving
+    Settings_Let AppName, "Settings", "SavePath", SavePath
+    Settings_Let AppName, "Settings", "FilePattern", FilePattern
+End Sub
+
+'Event handlers.
+Private Sub CommandBar_ButtonClick(ByVal Button As CommandbarLib.CommandBarButton)
+
+    Select Case Button.Key
+ 
+        Case "Screenshot"
+ 
+            If DelayTime = INDEX_NODELAY Then
+            
+                TakeScreenshot
+
+            Else
+
+                Select Case DelayTime
+
+                    Case INDEX_3SECDELAY
+
+                        DelayCountdown = 3
+
+                    Case INDEX_5SECDELAY
+
+                        DelayCountdown = 5
+
+                    Case INDEX_10SECDELAY
+
+                        DelayCountdown = 10
+
+                End Select
+
+                NotifyIcon_Add hWnd, ImageList, DelayCountdown
+                Hide
+                tmrDelay.Enabled = True
+
+            End If
+
+    End Select
+
+End Sub
+
+Private Sub CommandBar_ComboBoxClick(ByVal ComboBox As CommandbarLib.CommandBarComboBox)
+
+    LetDelayTime ComboBox.ListIndex
+
+End Sub
+
+Private Sub CommandBar_MenuClick(ByVal Item As CommandbarLib.Item)
+
+    Select Case Item.Key
+
+        Case "PlaySound"
+        
+            LetPlaySound Not PlaySound
+            
+        Case "FlashLED"
+            
+            LetFlashLED Not FlashLED
+
+        Case "AlwaysOnTop"
+            
+            LetAlwaysOnTop Not AlwaysOnTop
+            
+        Case "AskBeforeSaving"
+        
+            LetAskBeforeSaving Not AskBeforeSaving
+       
+        Case "SavePath"
+        
+            Dim strSavePath As String
+
+            strSavePath = InputBox(LoadResString(RES_DIALOG_DESTDIR), LoadResString(RES_DIALOG_DESTDIRTITLE), PathHelpers_RemovePathSeparator(SavePath))
+            
+            If LenB(strSavePath) <> 0 Then
+            
+                If Not PathHelpers_ContainsInvalidChars(strSavePath, False) Then
+                    If LenB(FileSystem.Dir(PathHelpers_RemovePathSeparator(strSavePath), fsAttrDirectory)) <> 0 Or strSavePath = "\" Then
+                        SavePath = PathHelpers_AddPathSeparator(strSavePath)
+                    Else
+                        MsgBox LoadResString(RES_DIALOG_PATHNOTEXISTS), vbCritical, AppName
+                    End If
+
+                Else
+                    MsgBox LoadResString(RES_DIALOG_INVALIDCHARS), vbCritical, AppName
+                End If
+
+            End If
+
+        Case "FileName"
+        
+            Dim strFileName As String
+
+            strFileName = InputBox(LoadResString(RES_DIALOG_FILENAMINGPATTERN), LoadResString(RES_DIALOG_FILENAMINGPATTERNTITLE), FilePattern)
+            
+            If Not IsEmpty(strFileName) Then
+                If LenB(strFileName) <> 0 Then
+                    If Not PathHelpers_ContainsInvalidChars(strFileName, True) Then
+                        FilePattern = strFileName
+                    Else
+                        MsgBox LoadResString(RES_DIALOG_INVALIDCHARS), vbCritical, AppName
+                    End If
+
+                Else
+                    FilePattern = DefaultFilePattern 'Reset to default.
+                End If
+            End If
+
+        Case "Help"
+    
+            CommonDialog.ShowHelp
+    
+    End Select
+
+End Sub
+
+Private Sub Form_Load()
+
+    AppName = App.Title
+    DefaultFilePattern = LoadResString(RES_MISC_DEFAULTPATTERN)
+
+    HasLED = NotificationLED_Count <> 0
+
+    ImageList = ImageListEx_Create(16, 16, ImageListEx_ILC_COLOR Or ImageListEx_ILC_MASK)
+    ImageListEx_AddMasked ImageList, PathHelpers_AddPathSeparator(App.Path) & AppName & ".bmp", vbMagenta
+
+    TaskbarIcon = TaskbarIcon_Let(hWnd, ImageList, 0, TaskbarIcon_tbSmallIcon)
+    'Get the difference between form width/height and client area width/height.
+
+    Dim lngNonClientHeight As Long, lngNonClientWidth  As Long
+
+    lngNonClientHeight = Height - ScaleHeight
+    lngNonClientWidth = Width - ScaleWidth
+
+    'Resize the form so it fits the Command Bar.
+    Move 0, 0, CommandBar.Width + lngNonClientWidth, CommandBar.Height + lngNonClientHeight
+
+    CommandBar.ImageList = ImageList
+
+    Dim objButton As CommandBarButton
+
+    Set objButton = CommandBar.Controls.Add(cbrButton, "Screenshot")
+    objButton.Image = 0
+    objButton.ToolTip = LoadResString(RES_TOOLBAR_TAKESCREENSHOT)
+
+    InitializeCommonDialog
+    InitializeComboBox
+    InitializeMenuBar
+    
+    LoadSettings
+
+End Sub
+
+Private Sub Form_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+
+    'This procedure receives the callbacks from the System Tray icon.
+    Dim lngResult  As Long
+
+    Dim lngMessage As Long
+
+    'The value of X will vary depending upon the scalemode setting.
+
+    If ScaleMode = vbPixels Then
+        lngMessage = x
+    Else
+        lngMessage = x \ Screen.TwipsPerPixelX
+    End If
+
+    Select Case lngMessage
+
+        Case NotifyIcon_WM_LBUTTONUP 'The user has tapped on the icon once.
+            tmrDelay.Enabled = False
+            NotifyIcon_Remove
+            TakeScreenshot
+
+    End Select
+    
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    SaveSettings
+    TaskbarIcon_Destroy TaskbarIcon
+    NotifyIcon_Remove
+    ImageListEx_Destroy ImageList
+End Sub
+
+Private Sub tmrDelay_Timer()
+
+    If DelayCountdown <> 1 Then
+        DelayCountdown = DelayCountdown - 1
+        NotifyIcon_Modify DelayCountdown
+    Else
+        tmrDelay.Enabled = False
+        NotifyIcon_Remove
+        TakeScreenshot
+    End If
+
+End Sub
+
